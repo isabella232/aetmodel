@@ -234,12 +234,13 @@ Tampering is closely related to spoofing and information disclosure.
 			(2.7.2) Tampering blocks
 		(2.8) Tampering with code (see Note 2.2)
 			(2.8.1) Tampering with code in the Epoch code repository
-              [2.8.1.1] Hiding malicious code in a commit (see Note 2.3);
-              [2.8.1.2] Performing an insider attack;
-              [2.8.1.3] Tampering with code using hijacked privileged accounts (see Note 2.4)
-			(2.8.2) Tampering with code in a library used by Epoch (See note 2.5)
-			(2.8.3) Tampering with code during compilation (e.g. via build software, see Note 2.6)
-			(2.8.4) Tampering from Erlang nodes on the same platform (see Note 2.7)
+              (2.8.1.1) Hiding malicious code in a commit (see Note 2.3);
+              (2.8.1.2) Performing an insider attack;
+              (2.8.1.3) Tampering with code using hijacked privileged accounts (see Note 2.4)
+            (2.8.2) Tampering with code in a library built into the Epoch binary
+			(2.8.3) Tampering with code in a shared dependency used by Epoch (See note 2.5)
+			(2.8.4) Tampering with code during compilation (e.g. via build software, see Note 2.6)
+			(2.8.5) Tampering from Erlang nodes on the same platform (see Note 2.7)
 
 * **Notes**
 * *Note 2.1: on (2.7) Database tampering*:
@@ -254,16 +255,16 @@ Epoch stores a persistent copy of the blockchain on some storage. Clearly this s
   * Example of a [similar past attack (1 Gentoo )](https://wiki.gentoo.org/wiki/Project:Infrastructure/Incident_Reports/2018-06-28_Github)
   * Example of a [similar past attack (2) Kernel.org](https://pastebin.com/BKcmMd47)
 
-* *Note 2.5: on (2.8.2) Reliance on the trusted computing base*:
+* *Note 2.5: on (2.8.3) Reliance on the trusted computing base*:
 The threats described under 2.8.1 apply also to all of the libraries that the Epoch nodes rely on.
 See also note 2.6.
 
-* *Note 2.6: on (2.8.3) Reflections on Trusting Trust*:
+* *Note 2.6: on (2.8.4) Reflections on Trusting Trust*:
 Based on [Ken Thomson's Turing award lecture](http://delivery.acm.org/10.1145/360000/358210/reflections.pdf?ip=85.227.246.214&id=358210&acc=OPEN&key=4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E6D218144511F3437&__acm__=1531250618_7cde18b767d136d90f839b6c196eeaae):
 "*To what extent should one trust a statement that a program is free of Trojan horses?
 Perhaps it is more important to trust the people who wrote the software.*"
 
-* *Note 2.7: on (2.8.4) Colocated Erlang nodes*:
+* *Note 2.7: on (2.8.5) Colocated Erlang nodes*:
 ***Any*** Erlang node on the same platform can interact with the Epoch nodes
 
 * **Related info**
@@ -432,9 +433,10 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 |  2.8.1.1 | Hiding (potentially obfuscated) malicious code in a commit | N/A |  Conduct security reviews of external pull requests | |   | low priority  |
 |  2.8.1.2 | Abusing position of trusted insider (e.g. developer) to tamper with code integrity | N/A |  Perform background checks of developers; periodically re-evaluate potential personal vulnerabilities of developers (debts, addictions, vulnberable personal situation, etc.) | |  | low priority  |
 |  2.8.1.3 | Hijacking a privileged account (e.g. developer, release manager, etc.) to tamper with code integrity | N/A |  (a) Use strong, 2-factor authentication for code repository; (b) ensure passwords are not reused; (c) ensure security of 2nd factor; (d) ensure security of authentication gateway  | |   | low priority  |
-|  2.8.2 | Tampering with code in the Epoch trusted computing base (incl. dependencies) | N/A |  (a) Bind releases to whitelisted release tags of dependency libraries   (b) Epoch security review and testing whenever release tag changes  | |   | low priority  |
-|  2.8.3 | Tampering with code via build software prior to compilation |  N/A	 | Provide recommended toolchains for most common platforms | | | low priority  |
-|  2.8.4 | Tampering with the Epoch node over another Erlang node running on the same platform |  N/A	 | OOS; run Epoch on a dedicated host (physical or virtual) | | | low priority  |
+|  2.8.2 | Tampering with code in a library built into the epoch binary | N/A |  (a) Bind releases to whitelisted release tags of dependency libraries   (b) Epoch security review and testing whenever release tag changes   (c) Lock checksum of dependencies used to build  | |   | low priority  |
+|  2.8.3 | Tampering with code in the Epoch trusted computing base (incl. dependencies) | N/A |  (a) Bind releases to whitelisted release tags of dependency libraries  (b) Epoch security review and testing whenever release tag changes  | |   | low priority  |
+|  2.8.4 | Tampering with code via build software prior to compilation |  N/A	 | Provide recommended toolchains for most common platforms | | | low priority  |
+|  2.8.5 | Tampering with the Epoch node over another Erlang node running on the same platform |  N/A	 | OOS; run Epoch on a dedicated host (physical or virtual) | | | low priority  |
 
 
 ### 3. Repudiation
