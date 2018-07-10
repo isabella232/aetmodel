@@ -2,6 +2,7 @@
 Documentation of threat model
 
 ## List of acronyms
+**AEVM** Aeternity Virtual Machine
 **CORS** Cross-Origin Resource Sharing
 
 **EoP** Elevation of Privilege  
@@ -21,7 +22,7 @@ Documentation of threat model
 **Node** (aka **Epoch node**) umbrella term for Aeternity protocol participant; includes miner nodes, client nodes, peers, etc.
 Identified by a URI consisting of the protocol 'aenode://', the public key, an '@' character, the hostname or IP number, a ':' character and the Noise port number.  
 
-**Connection** is a communication channel between two nodes peers. There is only one connection between each two peers.
+**Connection** is a communication channel between two nodes peers. Two arbitrary peers can have zero or many connections.
 
 **Peer Node** [is a node participating in a channel](https://github.com/Aeternity/protocol/tree/master/channels#terms).
 **Penetration testing** (aka ***pentesting***) authorized simulated attack on a computer system, performed to evaluate the security of the target system.
@@ -51,30 +52,30 @@ It abstracts the details and allows to define the trust boundaries and state cha
 General blockchain, allowing whatever actions on the blockchain.
 
 Different from Bitcoin in that it has many more features and that it introduces oracles, name registration, contracts, state-channels and governance.
-Higher transaction throughput possible than in Bitcoin, faster in 3 ways:  
+Higher transaction throughput possible than in Bitcoin, faster in 3 ways:
 
 		1. Faster block rate
 		2. Bitcoin-NG technology with key-blocks and micro-blocks
 		3. Off-chain state channels (micro-payments per second)
 
-High-level features:
+High-level features (a non-exhaustive list, to be completed):
 
 1. **Account**
 	* **Public key on the chain + private key** - the blockchain does not handle the private keys of the users. Users are assumed to take care of their own keys; we trust the key generation code;
 	* **Tokens** - each account holds a positive amount of tokens (aeons);
 	* **Nonce** is a counter that increases upon every transaction.
-
 2. **Contract language** a DSL for writing contracts.
 3. **Oracle mechanism** ~ An oracle operator scans the blockchain for query transactions and posts answers to those queries to the chain.
 4. **Naming service** - allows to claim a name;
-5. **State channels** - allow offline transactions;
+5. **State channels** - allow off-chain transactions;
 	* Opening and closing the channel [incurs fees](https://github.com/aeternity/protocol/blob/master/channels/README.md#incentives).
-6. **Privacy** - currently a non-issue;
-7. **Communication with nodes** - "seed" nodes provided by Aeternity, new nodes from the network through gossiping.
-8. **Transaction fees**
-This is a community blockchain, minimum fees are agreed upon by governance. Paying more than a minimum fee is possible and expected to be steered by the market.
-9. **Governance**
-There is a set of parameters, such as minimal transaction fee, that may be modified over the lifetime of the blockchain. Changes must be agreed upon by the majority of the community and governance is the mechanism to vote on the chain in favour or against changes.
+6. **Transaction fees**
+Aeternity is a community blockchain, minimum fees are agreed upon within the governance process.
+Paying more than a minimum fee is possible and expected to be steered by the market.
+7. **Governance**
+There is a set of parameters, such as minimal transaction fee, that may be modified over the lifetime of the blockchain. Changes must be agreed upon by the majority of the community.
+The governance mechanism allows to cast votes on the chain in favour or against changes.
+However, the governance mechanism does not include an automated process to modify parameters.
 
 =============================================
 
@@ -85,7 +86,7 @@ There is a set of parameters, such as minimal transaction fee, that may be modif
 ## Assets
 **Assets** describe are the valuable data that the business cares about
 1. **Private Keys** are of paramount importance, the "golden nuggets"; they uniquely identify epoch nodes and used to authenticate transactions.
-2. **Password for key encryption** used to encrypt keypair files stored to disk (under invstigation if ***both*** keypair files are encrypted - only private key is enough).
+2. **Password for key encryption** used to encrypt keypair files stored to disk (under investigation if ***both*** keypair files are encrypted - only private key is enough).
 3. **Communication on state channels for cooperating nodes** - this is potentially an asset (according to [issue#2](https://github.com/ThomasArts/aetmodel/issues/2), but is unconfirmed and needs further investigation.
 4. **Tokens** are an expression of value in the system.
 Control over tokens that belong to an account should be unconditionally linked to the respective account's private key.
@@ -93,24 +94,23 @@ Control over tokens that belong to an account should be unconditionally linked t
 
 ## Assumptions
 
-**Assumptions** about the system model and about the way users will interact with the system.
+The following list contains assumptions at the core of the threat model for the  Aeternity blockain.
+The list is **not** exhaustive and should be extended with additional assumptions about the functionality and structure of the Aeternity blockchain.
+The purpose of the list is - once complete - to explicitly list all assumptions that impact the security of the Aeternity blockchain and thus facilitate future work on improving the security and robustness of the blockchain.
 
 1. **The user model is completely flat**, there is only one type of users in the system, all users have equal privileges.
-	* To be discussed
 
-2. **Security of Epoch nodes** relies on the security of the compilation toolchain.
+2. **Security of Epoch nodes** relies on the security of the toolchain for compilation, building and dependency management.
 
 3. **Security of Epoch nodes** relies on the absence of malicious Erlang nodes running on the same platform.
+This is since an arbitrary Erlang node can connect to a target node running on the same host, assuming knowledge of the target node's *magic cookie*.
+The target nodes's default magic cookie is known to be set to 'epoch_cookie'
 
-### FALSE Assumptions
-1. **A node's private key** is the only data that must remain secret at all times   
+4. **A node's private key** is **not** the only data that must remain secret at all times.
+Messages exchanged in a state channel should be private as long as peers cooperate (See [issue #2](https://github.com/ThomasArts/aetmodel/issues/2)).
 
-	* 	FALSE, based on [issue #2](https://github.com/ThomasArts/aetmodel/issues/2): The messages exchanged in a state channel should be private—as long as peers cooperate—, i.e. MitM should not be possible.
-
-
-2. **All code runs in the same privilege ring**, i.e. all code on the epoch nodes has the same privilege level.
-
-	* FALSE, based on [issue #3](https://github.com/ThomasArts/aetmodel/issues/3): the AEVM executes untrusted code and EoP should not be possible.
+5. **Code does not run in the same privilege ring**, since code on the epoch nodes runs on different privilege levels (See [issue #3](https://github.com/ThomasArts/aetmodel/issues/3)).
+The AEVM executes untrusted code and EoP should not be possible.
 
 
 ## Threat Model
@@ -152,7 +152,7 @@ We revised the updated information and relevant aspects and included them into t
 		(1.1.1) At generation time.
 			(1.1.1.1) Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)
 			(1.1.1.2) Flawed implementation of key generation code
-					(1.1.1.2.1) Flawed Libsodium implememntation of key generation code
+					(1.1.1.2.1) Flawed Libsodium implementation of key generation code
 					(1.1.1.2.2) Flawed Erlang implementation of key generation code
 		(1.1.2) At rest / in storage.
 			(1.1.2.1) From local storage.
@@ -190,21 +190,21 @@ We revised the updated information and relevant aspects and included them into t
 		(1.4.4) Executing a fun though an external API
 
  * **Past attacks**
-*  [2012 | Generic | Ron was wrong, Whit is right | iacr eprint](https://eprint.iacr.org/2012/064.pdf)
-*  [2012 | Generic | Mining Your Ps and Qs: Detection of Widespread Weak Keys in Network Devices | Usenix Security](https://www.usenix.org/system/files/conference/usenixsecurity12/sec12-final228.pdf)
-*  [2016 | Generic | Weak Keys Remain Widespread in Network Devices | IMC'16](https://dl.acm.org/ft_gateway.cfm?id=2987486&type=pdf)
-* [2013 | Bitcoin | Weak crypto on Android](https://arstechnica.com/information-technology/2013/08/google-confirms-critical-android-crypto-flaw-used-in-5700-bitcoin-heist/).
-* [2011 | Bitcoin | Private keys stolen from wallet](https://bitcointalk.org/index.php?topic=16457.msg214423#msg214423)
-* [2017 | Bitcoin | MtGox wallet.dat file stolen (e.g. through exploit, rogue employee, back-up theft)](https://blog.wizsec.jp/2017/07/breaking-open-mtgox-1.html)
-* [2017 | Ethereum | Malicious wallet Providers](https://mybroadband.co.za/news/banking/214178-ethereum-wallet-provider-steals-account-keys-and-cashes-out.html)
-* [2017 | Ethereum | Exploit in Parity wallet](https://thehackernews.com/2017/07/ethereum-cryptocurrency-hacking.html)
-* [2017 | Ethereum | Bug in Parity wallet](https://www.theguardian.com/technology/2017/nov/08/cryptocurrency-300m-dollars-stolen-bug-ether)
-* [2018 | Ethereum | Bug/misconfiguration in client node](https://thehackernews.com/2018/06/ethereum-geth-hacking.html)
-* [2018 | Ethereum | Conrail wallet exploit](https://mashable.com/2018/06/11/coinrail-exchange-hack/?europe=true)
-* [2014 | Bitcoin | XSS wallet vulnerability](https://www.reddit.com/r/Bitcoin/comments/1n57uj/im_attempting_to_reach_a_security_contact_at/)
-* [2017 | Generic | Signature verification flaw 1](https://www.cvedetails.com/cve/CVE-2014-9934/)
-* [2017 | Generic | Signature verification flaw 2](https://www.cvedetails.com/cve/CVE-2017-2898/)
-* [2018 | Etheremum | BGP hijacking](https://www.theverge.com/2018/4/24/17275982/myetherwallet-hack-bgp-dns-hijacking-stolen-ethereum)
+*  [A1.1 | 2012 | Generic | Ron was wrong, Whit is right | iacr eprint](https://eprint.iacr.org/2012/064.pdf)
+*  [A1.2 |2012 | Generic | Mining Your Ps and Qs: Detection of Widespread Weak Keys in Network Devices | Usenix Security](https://www.usenix.org/system/files/conference/usenixsecurity12/sec12-final228.pdf)
+*  [A1.3 |2016 | Generic | Weak Keys Remain Widespread in Network Devices | IMC'16](https://dl.acm.org/ft_gateway.cfm?id=2987486&type=pdf)
+* [A1.4 |2013 | Bitcoin | Weak crypto on Android](https://arstechnica.com/information-technology/2013/08/google-confirms-critical-android-crypto-flaw-used-in-5700-bitcoin-heist/).
+* [A1.5 |2011 | Bitcoin | Private keys stolen from wallet](https://bitcointalk.org/index.php?topic=16457.msg214423#msg214423)
+* [A1.6 |2017 | Bitcoin | MtGox wallet.dat file stolen (e.g. through exploit, rogue employee, back-up theft)](https://blog.wizsec.jp/2017/07/breaking-open-mtgox-1.html)
+* [A1.7 |2017 | Ethereum | Malicious wallet Providers](https://mybroadband.co.za/news/banking/214178-ethereum-wallet-provider-steals-account-keys-and-cashes-out.html)
+* [A1.8 |2017 | Ethereum | Exploit in Parity wallet](https://thehackernews.com/2017/07/ethereum-cryptocurrency-hacking.html)
+* [A1.9 |2017 | Ethereum | Bug in Parity wallet](https://www.theguardian.com/technology/2017/nov/08/cryptocurrency-300m-dollars-stolen-bug-ether)
+* [A1.10 |2018 | Ethereum | Bug/misconfiguration in client node](https://thehackernews.com/2018/06/ethereum-geth-hacking.html)
+* [A1.11 |2018 | Ethereum | Conrail wallet exploit](https://mashable.com/2018/06/11/coinrail-exchange-hack/?europe=true)
+* [A1.12 |2014 | Bitcoin | XSS wallet vulnerability](https://www.reddit.com/r/Bitcoin/comments/1n57uj/im_attempting_to_reach_a_security_contact_at/)
+* [A1.13 |2017 | Generic | Signature verification flaw 1](https://www.cvedetails.com/cve/CVE-2014-9934/)
+* [A1.14 |2017 | Generic | Signature verification flaw 2](https://www.cvedetails.com/cve/CVE-2017-2898/)
+* [A1.15 |2018 | Etheremum | BGP hijacking](https://www.theverge.com/2018/4/24/17275982/myetherwallet-hack-bgp-dns-hijacking-stolen-ethereum)
 
 ### (2) Tampering
 Tampering is closely related to spoofing and information disclosure.
@@ -216,8 +216,9 @@ Tampering is closely related to spoofing and information disclosure.
 		(2.2) Tampering with message integrity
 			(2.2.1) No message integrity
 			(2.2.2) Weak message integrity;
-		(2.3) Tampering with the ordering of transactions included in a block
-			[2.3.1] Tampering the timestamp in mined blocks
+        (2.3) Tampering with block integrity
+            (2.3.1) Tampering with the ordering of transactions included in a block
+            (2.3.2) Tampering the timestamp in mined blocks
 		(2.4) Tampering with block validity
 			(2.4.1) No verification of block validity
 			(2.4.2) Weak verification of block validity
@@ -232,22 +233,45 @@ Tampering is closely related to spoofing and information disclosure.
 			(2.7.1) Tampering the genesis blocks
 			(2.7.2) Tampering blocks
 		(2.8) Tampering with code (see Note 2.2)
-			(2.8.1) Tampering with code in the epoch repository
-			(2.8.2) Tampering with code in a library built into the epoch binary
-			(2.8.3) Tampering with code in a library used by epoch as shared dependency
-			(2.8.4) Tampering with code before compilation (e.g. via build software)
-			(2.8.5) Tampering from Erlang nodes on the same platform (see Note 2.3)
 
-* **Note 2.1: on (2.7) Database tampering**
+			(2.8.1) Tampering with code in the Epoch code repository
+              [2.8.1.1] Hiding malicious code in a commit (see Note 2.3);
+              [2.8.1.2] Performing an insider attack;
+              [2.8.1.3] Tampering with code using hijacked privileged accounts (see Note 2.4)
+			(2.8.2) Tampering with code in a library used by Epoch (See note 2.5)
+			(2.8.3) Tampering with code during compilation (e.g. via build software, see Note 2.6)
+			(2.8.4) Tampering from Erlang nodes on the same platform (see Note 2.7)
+
+* **Notes**
+* *Note 2.1: on (2.7) Database tampering*:
 Epoch stores a persistent copy of the blockchain on some storage. Clearly this storage is hard to get to, but if stored on some cloud machine, it may be tampered with.
 
-* **Note 2.2: on (2.8) Code Tampering**
-The epoch node software is open source and constructed using other open source components or libraries.
-* **Note 2.3: on (2.8.5) Colocated Erlang nodes**
+* *Note 2.2: on (2.8) Code Tampering*:
+ The epoch node software is open source and constructed using other open source components or libraries.
+* *Note 2.3: on (2.8.1.1) Tampering w. code in Epoch code repository*:
+  * Example of a [similar past attack](https://getmonero.org/2017/05/17/disclosure-of-a-major-bug-in-cryptonote-based-currencies.html)
+
+* *Note 2.4: on (2.8.1.2) Tampering w. code using hijacked privileged accounts*:
+  * Example of a [similar past attack (1 Gentoo )](https://wiki.gentoo.org/wiki/Project:Infrastructure/Incident_Reports/2018-06-28_Github)
+  * Example of a [similar past attack (2) Kernel.org](https://pastebin.com/BKcmMd47)
+
+* *Note 2.5: on (2.8.2) Reliance on the trusted computing base*:
+The threats described under 2.8.1 apply also to all of the libraries that the Epoch nodes rely on.
+See also note 2.6.
+
+* *Note 2.6: on (2.8.3) Reflections on Trusting Trust*:
+Based on [Ken Thomson's Turing award lecture](http://delivery.acm.org/10.1145/360000/358210/reflections.pdf?ip=85.227.246.214&id=358210&acc=OPEN&key=4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35%2E6D218144511F3437&__acm__=1531250618_7cde18b767d136d90f839b6c196eeaae):
+"*To what extent should one trust a statement that a program is free of Trojan horses?
+Perhaps it is more important to trust the people who wrote the software.*"
+
+* *Note 2.7: on (2.8.4) Colocated Erlang nodes*:
 ***Any*** Erlang node on the same platform can interact with the Epoch nodes
 
 * **Related info**
 	* [Unchecked block validity](https://github.com/Aeternity/protocol/blob/master/SYNC.md#incentives)
+
+
+
 
 ### (3) Repudiation
 To be extended once the implementation of bitcoin-NG is stable.
@@ -301,8 +325,8 @@ By posting enormous amounts of transactions to the network, the pool of transact
 			(5.4.1.3) Eclipse by manipulating time
 			(5.4.1.4) Obtain node 'secret' used to determine peer selection from unverified pool
 		(5.4.2) Network-wide attacks against the Aeternity network
-			(5.4.2.1) Attacks to slow down the Aeternity network
-		    (5.4.2.2) Flooding the network with unresponsive nodes
+			(5.4.2.1) Attacks to slow down the Aeternity network (See note 5.1)
+		    [5.4.2.2] Flooding the network with unresponsive nodes
 		(5.4.3) Denial of Service against predefined peer nodes
 			(5.4.3.1) Denial of Service using API functionality
 			(5.4.3.2) Denial of Service using generic DoS methods
@@ -315,10 +339,16 @@ By posting enormous amounts of transactions to the network, the pool of transact
 		(5.6.4) Dropping messages on a state channel;
 		(5.6.5) Exploiting errors in the contract language to run contracts without gas;
 
+
+  * **Notes**
+    * *Note 5.1 on 5.4.2.1 Attacks to slow down the Aeternity network*: ISPs can delay block propagation between nodes even without being detected, using a so-called 'delay attack' (see A5.3 under "past attacks" below).
+    While A5.3 has been demonstrated for Bitcoin, it is worth investigating how robust is Aeternity to such attacks.
+
+
  * **Past attacks**
- 	* [2018 | Ethereum | Low-Resource Eclipse Attacks on Ethereum’s Peer-to-Peer Network (iacr eprint)](https://www.cs.bu.edu/~goldbe/projects/eclipseEth.pdf)
- 	* [2018 | Ethereum | Unhandled exception vulnerability exists in Ethereum API](https://nvd.nist.gov/vuln/detail/CVE-2017-12119)
- 	* [2017 | Bitcoin | Hijacking Bitcoin: routing attacks on cryptocurrencies | IEEE S&P](https://btc-hijack.ethz.ch/)
+  * [A5.1 | 2018 | Ethereum | Low-Resource Eclipse Attacks on Ethereum’s Peer-to-Peer Network (iacr eprint)](https://www.cs.bu.edu/~goldbe/projects/eclipseEth.pdf)
+  * [A5.3 |2018 | Ethereum | Unhandled exception vulnerability exists in Ethereum API](https://nvd.nist.gov/vuln/detail/CVE-2017-12119)
+  * [A5.3 |2017 | Bitcoin | Hijacking Bitcoin: routing attacks on cryptocurrencies | IEEE S&P](https://btc-hijack.ethz.ch/)
 
 * **Background information**
 	 * [2018 | Aeternity state channel incentives](https://github.com/Aeternity/protocol/tree/master/channels#incentives)
@@ -392,7 +422,8 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 | 2.1.3  | Compromising connection security by nonce wrap back |  |  | Nonce wraps back after 2^64 - 1 messages, long over channel lifetime |  |   |
 |  2.2.1 | Failing to verify message integrity  | Ensure message integrity  |   | Prevented using the Noise protocol with specific handshake and encryption | Verify correct implementation using a QuickCheck model  ||
 |  2.2.2 | Failing to correctly implement message integrity verification | Use cryptographically strong and well tested crypto algorithms and implementations   |   |   Prevented using the Noise protocol with specific handshake and encryption |  Verify correct implementation using a QuickCheck model ||
-|  2.3 | Modifying order of transactions included in a block (due to a bug or malicious intent) | Correct node implementation |   |   |  Discuss whether this is a threat |   |
+|  2.3.1 | Modifying order of transactions included in a block (due to a bug or malicious intent) | N/A |  N/A |   |  Discuss whether this is a threat |   |
+|  2.3.2 | Modifying the timestamp in mined blocks (due to a bug or malicious intent) | N/A | N/A  |   |  Discuss whether this is a threat |   |
 |  2.4.1 | Nodes failing to verify block validity before adding it to the blockchain  | Correct implementation of block validity verification in node implementation |  Strong incentives for nodes to validate blocks |   |  Verify correct implementation using a QuickCheck model |   |
 |  2.4.2 | Nodes verifying block validity, but using an incomplete or flawed verification implementation | Correct implementation of block validity verification in node implementation |    |   |  Verify correct implementation using a QuickCheck model |   |
 |  2.5.1 | Nodes failing to verify transaction validity  | Correct implementation of transaction validity verification in node implementation |  Protocol incentives for nodes to validate blocks |   |  Verify correct implementation using a QuickCheck model |   |
@@ -401,11 +432,12 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 |  2.6.1 | Tampering with the keys of miner nodes to obtain rewards from mining | Prevent run-time substitution of keys | Needs further investigation |   | Review once protocol implementation stable  |   |
 |  2.7.1 | Tampering the genesis block in persistent DB | A node is isolated if genesis block differs, no communication with other epochs possible  | Ensure that database runs in protected area |   |   |  no issue |
 |  2.7.2 | Tampering a block in persistent DB | DB is read at startup and all blocks are validated again, tampering will be noticed in block-hash that does not fit. If new consecutive hashes have been computed, then DB is considered a fork and tampered part is removed while syncing with other nodes |  Ensure that database runs in protected area | |   | no issue  |
-|  2.8.1 | Tampering with code in the Epoch repository | N/A |  (a) Use strong, 2-factor authentication for code repository (b) Security review of external pull requests | |   | low priority  |
-|  2.8.2 | Tampering with code in a library built into the epoch binary | N/A |  (a) Bind releases to whitelisted release tags of dependency libraries   (b) Epoch security review and testing whenever release tag changes   (c) Lock checksum of dependencies used to build  | |   | low priority  |
-|  2.8.3 | Tampering with code in a library used by epoch as shared dependency | N/A |  Startup/Runtime test libraries(?) - Needs further investigation  | |   | low priority  |
-|  2.8.4 | Tampering with code via build software prior to compilation |  N/A	 | Provide recommended toolchains for most common platforms | | | low priority  |
-|  2.8.5 | Tampering with the Epoch node over another Erlang node running on the same platform |  N/A	 | OOS; run Epoch on a dedicated host (physical or virtual) | | | low priority  |
+|  2.8.1.1 | Hiding (potentially obfuscated) malicious code in a commit | N/A |  Conduct security reviews of external pull requests | |   | low priority  |
+|  2.8.1.2 | Abusing position of trusted insider (e.g. developer) to tamper with code integrity | N/A |  Perform background checks of developers; periodically re-evaluate potential personal vulnerabilities of developers (debts, addictions, vulnberable personal situation, etc.) | |  | low priority  |
+|  2.8.1.3 | Hijacking a privileged account (e.g. developer, release manager, etc.) to tamper with code integrity | N/A |  (a) Use strong, 2-factor authentication for code repository; (b) ensure passwords are not reused; (c) ensure security of 2nd factor; (d) ensure security of authentication gateway  | |   | low priority  |
+|  2.8.2 | Tampering with code in the Epoch trusted computing base (incl. dependencies) | N/A |  (a) Bind releases to whitelisted release tags of dependency libraries   (b) Epoch security review and testing whenever release tag changes  | |   | low priority  |
+|  2.8.3 | Tampering with code via build software prior to compilation |  N/A	 | Provide recommended toolchains for most common platforms | | | low priority  |
+|  2.8.4 | Tampering with the Epoch node over another Erlang node running on the same platform |  N/A	 | OOS; run Epoch on a dedicated host (physical or virtual) | | | low priority  |
 
 
 ### 3. Repudiation
@@ -455,7 +487,7 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 |  Tree Node |Explanation   | Developer Mitigation   | Operational Mitigation   | Notes | Actions | Priority |
 |---|---|---|---|---|---|---|
 | 6.1.1  | Running malicious code embedded in contacts | Sanity checks for code in smart contracts?  |   |  Malicious code embedded in the contracts can be run to exploit vulnerabilities in AEVM and lead to elevation of privilege on the epoch node or disclosure of information | Correct implementation and security testing of the AEVM |   |
-| 6.1.2 | Exploiting known erlang cookie to connect to another Erlang node | Node is started with -sname which disallows access from different IP address | Erlang daemon only listens to localhost  |  Erlang daemon accepts incoming connection from other Erlang node (default cookie is epoch_cookie) |   | low |
+| 6.1.2 | Exploiting known Erlang cookie to connect to another Erlang node | Node is started with -sname which disallows access from different IP address | Erlang daemon only listens to localhost  |  Erlang daemon accepts incoming connection from other Erlang node (default cookie is epoch_cookie) |   | low |
 | 6.2.1.1  | Exploit Epoch node API vulnerabilities to obtain status of trusted node |  Security testing of Epoch node APIs | N/A  |   |   |   |
 | 6.2.1.2  | Creating custom distribution of Epoch node code with a modified set of trusted nodes	 | N/A  | Encourage use of "genuine" epoch nodes |  Discuss potential as "existential" risk to the network |   |   | |
 
