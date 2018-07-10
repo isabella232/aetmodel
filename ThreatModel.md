@@ -139,7 +139,7 @@ We have reviewed and adapted the parts that were considered relevant to Aeternit
 Earlier work has been done on a [thread model for Aeternity](https://github.com/Aeternity/protocol/blob/master/SYNC.md#threat-model).
 We revised the updated information and relevant aspects and included them into the current threat model.
 
-####========================================================
+=============================================
 
 "(1.1.1)" -> Details provided in tables
 "[1.1.1]" -> Details NOT provided in tables
@@ -233,6 +233,7 @@ Tampering is closely related to spoofing and information disclosure.
 			(2.7.1) Tampering the genesis blocks
 			(2.7.2) Tampering blocks
 		(2.8) Tampering with code (see Note 2.2)
+
 			(2.8.1) Tampering with code in the Epoch code repository
               (2.8.1.1) Hiding malicious code in a commit (see Note 2.3);
               (2.8.1.2) Performing an insider attack;
@@ -292,7 +293,7 @@ The threats to the confidentiality and integrity of the node private keys are li
 
 Hence, if the assumption is correct, the information disclosure threat tree is a subtree of the ***Spoofing*** threat tree
 
-Update 2018-07-02, based on [issue#2](https://github.com/ThomasArts/aetmodel/issues/2)***The messages exchanged in a state channel should be private—as long as peers cooperate—, i.e. MitM should not be possible***, i.e. assumption  1 is false.
+Update 2018-07-02, based on [issue#2](https://github.com/ThomasArts/aetmodel/issues/2) ***The messages exchanged in a state channel should be private — as long as peers cooperate —, i.e. MitM should not be possible***, i.e. assumption  1 is false.
 
 Threat tree for threat vector (4): Information Disclosure.
 
@@ -308,6 +309,7 @@ Creating and posting a transaction is a computationally cheap action for an atta
 Validation of a transaction is computational cheap, but having to validate many transactions that cannot be included in a block, is a computational overhead for a node. If an attacker could
 post enormous amounts of transactions to the network, it could potentially impact the rate in which correct transactions are accepted.
 Transactions may validate but nevertheless not be possible to include in a block. For example, an attacker could post a spend-transaction including more tokens than the from account contains. This transaction is then kept in the transaction pool for a while and *check this* validated for each new block candidate.  
+By posting enormous amounts of transactions to the network, the pool of transactions kept to be included in the next block could grow beyond memory capacity causing the node to crash or possible valid transactions being pruned. Additionally the network capacity could be overloaded and therefore distribution of possible valid transactions be impacted as propagation of these may be delayed or stopped.
 
 	(5.1) Posting invalid transactions.
 	(5.2) Posting unusable transactions
@@ -325,11 +327,12 @@ Transactions may validate but nevertheless not be possible to include in a block
 			(5.4.1.4) Obtain node 'secret' used to determine peer selection from unverified pool
 		(5.4.2) Network-wide attacks against the Aeternity network
 			(5.4.2.1) Attacks to slow down the Aeternity network (See note 5.1)
-		(5.4.3) Denial of Service against Predefined Peer Nodes
+		    [5.4.2.2] Flooding the network with unresponsive nodes
+		(5.4.3) Denial of Service against predefined peer nodes
 			(5.4.3.1) Denial of Service using API functionality
 			(5.4.3.2) Denial of Service using generic DoS methods
 	(5.5) Exploiting software vulnerabilities to degrade or deny service
-		(5.5.1) Improper Check for Unusual or Exceptional Condition
+		(5.5.1) Improper check for unusual or exceptional condition
 	(5.6) Exploiting epoch protocol vulnerabilities to degrade or deny service.
 		(5.6.1) Refusing to cooperate after having opened the channel;  
 		(5.6.2) Refusing to sign a multi-party transaction;
@@ -471,6 +474,7 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 |  5.4.1.4 | Eclipsing node by influencing peer selection from unverified pool; assumes obtaining 'secret' used for peer selection |  Needs further investigation | Needs further investigation  | |Secret generation, storage and usage is [undocumented](https://github.com/Aeternity/protocol/blob/master/GOSSIP.md#bucket-selection) | |  
 | 5.4.2  | Slowing down or disrupting the Aeternity network by tampering network traffic | N/A   |  N/A | Discuss whether in scope  |  |   |
 | 5.4.2.1  | Slowing down the Aeternity network by tampering with the outgoing and incoming messages of a subset of nodes  | Ensure message integrity   |   |   | Attack shown for Bitcoin - investigate relevance  |   |
+| 5.4.2.2  | Slowing down the Aeternity network by flooding the network with unresponsive nodes  | Score nodes, detect and remove disruptive ones |   |   |   |   |
 | 5.4.3.1  | Flooding predefined peer nodes with requests on the Chain WebSocket API  |  Check request signature   | Throttle requests from same origin  |   |   |   |
 | 5.4.3.2  | Flooding predefined peer nodes with packets using DoS techniques on the TCP (SYN flood) or Epoch protocol level  |    |   |   | Investigate feasibility  |   |
 |  5.5 |  Exploiting API vulnerabilities to launch a DoS attack on either individual nodes or targeted groups of nodes  | Security testing of the API  |  N/A |   | Verify that indeed all invalid transactions are rejected using a QuickCheck model (?) |  High |
