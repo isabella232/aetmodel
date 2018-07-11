@@ -10,6 +10,7 @@ Documentation of threat model
 **PRNG** Pseudo-Random Number Generator   
 **MitM** Man-in-the-Middle (attack)
 **NTP** Network Time Protocol   
+**VM** Virtual Machine
 **XSS** Cross-Site Scripting (exploit)
 ## Definitions
 
@@ -158,7 +159,10 @@ We revised the updated information and relevant aspects and included them into t
 			(1.1.2.1) From local storage.
 			(1.1.2.2) Third-party storage (e.g. on-line wallets).
 			(1.1.2.3) Exploit cross-site scripting vulnerabilities browser-based wallets.
-			(1.1.2.4) By neighbours on shared infrastructure.
+			(1.1.2.4) Malicious neighbours on shared hardware platform.
+                    (1.1.2.4.1) Malicious neighbours on shared operating system
+                    (1.1.2.4.2) Malicious neighbours on operating system virtualized platform (in containers).
+                    (1.1.2.4.3) Malicious neighbours on hardware virtualized platform (in virtual machines)
 			(1.1.2.5) By operator of virtualized infrastructure.
 			(1.1.2.6) By malicious apps on mobile devices.
 				(1.1.2.6.1) By malicious colocated apps on mobile devices
@@ -233,7 +237,6 @@ Tampering is closely related to spoofing and information disclosure.
 			(2.7.1) Tampering the genesis blocks
 			(2.7.2) Tampering blocks
 		(2.8) Tampering with code (see Note 2.2)
-
 			(2.8.1) Tampering with code in the Epoch code repository
               (2.8.1.1) Hiding malicious code in a commit (see Note 2.3);
               (2.8.1.2) Performing an insider attack;
@@ -391,11 +394,13 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 |  1.1.2.1 | Vulnerabilities in the client platform, exploitable through trojans or viruses |  N/A | N/A  | Out of scope (OOS) | | |
 |  1.1.2.2    | Vulnerabilities in 3rd party wallets and applications | N/A  |  N/A | OOS; NOTE: Risk of multiple account compromise   | | |
 |1.1.2.3     |  Vulnerabilities in web services allowing an adversary to execute code on nodes to reveal the wallet| Security Testing  |  N/A | OOS; NOTE: Risk of multiple account compromise   | | |
-|1.1.2.4  | Competing nodes running on shared infrastructure leaking keys of neighbour nodes, e.g. from configuration files | API for storing keys in a hardware enclave / on external device | (a) Erlang ports should be closed; | May be difficult to solve|  | |
+|1.1.2.4.1  | Malicious processes running on a shared operating system (with process isolation), leaking keys of neighbour nodes through operating system vulnerabilities or side-channel attacks | API for storing keys in a hardware enclave / on external device | Erlang ports should be closed; Regular OS and hypervisor patching;| |  | |
+|1.1.2.4.2  | Malicious processes running on a shared hardware platform (with kernel isolation), leaking keys of neighbour nodes through operating system vulnerabilities or side-channel attacks | API for storing keys in a hardware enclave / on external device | Erlang ports should be closed; Regular OS and patching; | |  | |
+|1.1.2.4.3  | Malicious processes running on a shared hardware platform (with hypervisor isolation), leaking keys of neighbour nodes through operating system vulnerabilities or side-channel attacks | API for storing keys in a hardware enclave / on external device | Erlang ports should be closed; Regular VM OS and hypervisor patching; | |  | |
 |1.1.2.5  | Operators of virtualized infrastructure obtaining keys of nodes in virtual containers by reading files stored on disk | API for storing keys in a hardware enclave |  N/A |  Low bar | | |
 |1.1.2.6.1  | Malicious mobile applications colocated with an Epoch node or wallet potentially leaking the private key | Leverage hardware-supported features  (e.g. ARM TrustZone) to protect private key |  N/A |  | | |
-|1.1.2.6.2  | Malicious wallet implementations *leaking* Epoch node private keys | Develop applications that leverage hardware-supported features  (e.g. ARM TrustZone) to maintain key security while providing the necessary crypto services to e.g. wallets and Epoch nodes |  N/A |  | | |
-|1.1.2.6.3  | Malicious wallet implementations *using* private keys to sign arbitrary transactions | N/A |  N/A | Needs further investigation | | |
+|1.1.2.6.2  | Malicious wallet implementations *leaking* Epoch node private keys | Develop applications that leverage hardware-supported features  (e.g. ARM TrustZone) to maintain key security while providing the necessary crypto services to e.g. wallets and Epoch nodes without revealing keys |  N/A |  | | |
+|1.1.2.6.3  | Malicious wallet implementations *using* private keys to sign arbitrary transactions | N/A |  N/A | OOS | | |
 |1.1.2.6.4  | Applications leaking individual private keys through cloud back-ups | N/A |  Disable  cloud back-ups for relevant applications |  | | |
 |  1.1.3.1 | Exploiting external interfaces | Penetration testing of  external interfaces of application: http, web services and noise |  |  | TODO: Define penetration testing | |
 |  1.1.3.2 | Misuse of node node functionality by obtaining access to the node  | | Standard unix ports and Erlang distribution daemon blocked for incoming requests |  | TODO:specify what needs to be closed?? | |
@@ -409,7 +414,7 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 |  1.3.1.1 |  Adversary observing the normal packet flow and inserting own packets. | Enforce transport integrity  |   |  | Prevented using the Noise protocol with specific handshake and encryption |   |
 |  1.3.1.2 |  Adversary inserting own arbitrary packets without observing the packet flow. | Enforce transport integrity  | Transport layer security  |  | Prevented using the Noise protocol |   |
 |  1.3.2 |  DNS attack rerouting users to a scam site collecting user's login credentials | N/A  | N/A  | OOS  | |   |
-|  1.4.1 |  Web service with malicious code exploiting internal node APIs  | Enforce strict origin policy  | N/A  | Needs further investigation  | |   |
+|  1.4.1 |  Web service with malicious code exploiting internal node HTTP APIs  | Enforce strict origin policy  | N/A  | Needs further investigation  | |   |
 |  1.4.2 |  Adversary exploiting the state channel HTTP API  | Security testing of the API  | N/A  | Needs further investigation  | |   |
 |  1.4.3 |  Adversary exploiting the node's HTTP APIs  | Security testing of the API  | N/A  | Needs further investigation  | |   |
 |  1.4.4 |  Adversary externally executing a fun over the nodes API  | Security testing of the API  | N/A  | Needs further investigation  | |  High (devastating consequences) |
@@ -420,16 +425,16 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 |---|---|---|---|---|---|---|
 | 2.1.1  | Failing to implement connection integrity | Ensure channel integrity |   |   Prevented using the Noise protocol with specific handshake and encryption |  Verify correct implementation using a QuickCheck model ||
 | 2.1.2  | Using weak algorithms to ensure connection integrity | Use cryptographically strong and well tested crypto algorithms and implementations  |   | Prevented using the Noise protocol with specific handshake and encryption |   Verify correct implementation using a QuickCheck model|   |
-| 2.1.3  | Compromising connection security by nonce wrap back |  |  | Nonce wraps back after 2^64 - 1 messages, long over channel lifetime |  |   |
+| 2.1.3  | Compromising connection security by nonce wrap back |  |  | Nonce wraps back after 2^64 - 1 messages, long over channel lifetime | Needs further investigation; potentially enforce key rotation |   |
 |  2.2.1 | Failing to verify message integrity  | Ensure message integrity  |   | Prevented using the Noise protocol with specific handshake and encryption | Verify correct implementation using a QuickCheck model  ||
 |  2.2.2 | Failing to correctly implement message integrity verification | Use cryptographically strong and well tested crypto algorithms and implementations   |   |   Prevented using the Noise protocol with specific handshake and encryption |  Verify correct implementation using a QuickCheck model ||
-|  2.3.1 | Modifying order of transactions included in a block (due to a bug or malicious intent) | N/A |  N/A |   |  Discuss whether this is a threat |   |
+|  2.3.1 | Modifying order of transactions included in a block (due to a bug or malicious intent) | N/A |  N/A |   |  Potentially a threat; Needs further investigation |   |
 |  2.3.2 | Modifying the timestamp in mined blocks (due to a bug or malicious intent) | N/A | N/A  |   |  Discuss whether this is a threat |   |
 |  2.4.1 | Nodes failing to verify block validity before adding it to the blockchain  | Correct implementation of block validity verification in node implementation |  Strong incentives for nodes to validate blocks |   |  Verify correct implementation using a QuickCheck model |   |
 |  2.4.2 | Nodes verifying block validity, but using an incomplete or flawed verification implementation | Correct implementation of block validity verification in node implementation |    |   |  Verify correct implementation using a QuickCheck model |   |
-|  2.5.1 | Nodes failing to verify transaction validity  | Correct implementation of transaction validity verification in node implementation |  Protocol incentives for nodes to validate blocks |   |  Verify correct implementation using a QuickCheck model |   |
+|  2.5.1 | Nodes failing to verify transaction validity  | Correct implementation of transaction validity verification in node implementation |  (a) Protocol incentives for nodes to validate blocks; (b) Penalise nodes relaying invalid blocks/transactions |  Needs further investigation |  Verify correct implementation using a QuickCheck model |   |
 |  2.5.2 | Nodes verifying transaction validity, but using an incomplete or flawed verification implementation | Correct implementation of transaction validity verification in node implementation |    |   |  Verify correct implementation using a QuickCheck model |   |
-|  2.5.3 | Nodes modifying transaction prior to including it in a block  | | Protocol incentives preventing nodes from modifying transactions  |   |  Verify correct implementation using a QuickCheck model |   |
+|  2.5.3 | Nodes modifying transactions prior to including it in a block  | Ensure correct implementation of the signature scheme | N/A  |   |  Verify correct implementation of the signature scheme using a QuickCheck model |   |
 |  2.6.1 | Tampering with the keys of miner nodes to obtain rewards from mining | Prevent run-time substitution of keys | Needs further investigation |   | Review once protocol implementation stable  |   |
 |  2.7.1 | Tampering the genesis block in persistent DB | A node is isolated if genesis block differs, no communication with other epochs possible  | Ensure that database runs in protected area |   |   |  no issue |
 |  2.7.2 | Tampering a block in persistent DB | DB is read at startup and all blocks are validated again, tampering will be noticed in block-hash that does not fit. If new consecutive hashes have been computed, then DB is considered a fork and tampered part is removed while syncing with other nodes |  Ensure that database runs in protected area | |   | no issue  |
@@ -464,7 +469,7 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 | 5.1  | Posting invalid transactions  | The node that receives a transaction validates this transaction. Invalid transactions are rejected and never propagated to other nodes.  | Handling the http request is more work than validating the transaction. By standard http load balancing the number of posted transactions is the limiting factor, rejecting the transactions is cheap. |   | Verify that indeed all invalid transactions are rejected using a QuickCheck model  | medium |
 | 5.2  | Posting unusable transactions  | Validation is light-weight and ensures that if the transaction is accepted in a block candidate fee and gas can be paid.  | Valid transactions have a configurable TTL that determines how long a transaction may stay in the memory pool. By default a node is configured to have a transaction in the pool for at most 256 blocks.  |   |   |   |
 | 5.2.1  | Nodes resubmitting unusable transactions to a arbitrary node to cause a DoS  | Needs further investigation.  | Needs further investigation.  |   |   |   |
-| 5.2.2  | Nodes (both malicious and benign) flooding the the p2p network by continuously gossiping unusable transactions | Needs further investigation.  | Needs further investigation.  |   |   |   |
+| 5.2.2  | Nodes (both malicious and benign) flooding the the p2p network by continuously gossiping unusable transactions | Implement a scoring system for the peers; Needs further investigation.  | Needs further investigation.  |   |   |   |
 | 5.3.1  | Exploiting memory leaks in cleaning transaction pool  | Erlang is a garbage collected language and additional garbage collection is implemented for invalid transactions.  |   | Erlang does not garbage collect atoms. Transactions that are potentially able to create new atoms from arbitrary binaries (e.g. name claim transactions) should be reviewed | TODO: check for binary_to_atom in transaction handling. Verify memory constraints on transaction pool | low |
 | 5.3.2  | Exceeding the limit of atoms to cause a node crash. | Ensure atoms are not created arbitrarily; ensure atoms are not created based on API input.  |   |   On Erlang nodes, atoms are stored once for each unique atom in the atom table. Erlang does not garbage collect atoms. Transactions that are potentially able to create new atoms from arbitrary binaries (e.g. name claim transactions) should be reviewed | TODO: check for binary_to_atom in transaction handling. Verify memory constraints on transaction pool | low |
 | 5.3.3  |  Causing a node crash by exceeding the limit of non-garbage-collected processes.  | Correct implementation of pid creation on nodes; ensure limits on number of processes created based on API input.  |  N/A | On Erlang nodes, process identifier refers into a process table and a node table. | TODO: check code spawning new processes on nodes | low |
@@ -479,7 +484,7 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 | 5.4.3.2  | Flooding predefined peer nodes with packets using DoS techniques on the TCP (SYN flood) or Epoch protocol level  |    |   |   | Investigate feasibility  |   |
 |  5.5 |  Exploiting API vulnerabilities to launch a DoS attack on either individual nodes or targeted groups of nodes  | Security testing of the API  |  N/A |   | Verify that indeed all invalid transactions are rejected using a QuickCheck model (?) |  High |
 |  5.5.1 | Using specially crafted JSON requests to cause an unhandled exception resulting in DoS | Security testing of the API  |  N/A |   | Verify that indeed all invalid transactions are rejected using a QuickCheck model (?) |  High |
-|  5.6.1 | Locking up other nodes' coins in transactions | N/A  |  Discouraged through incentives (?) |  Opening a channel with a peer and subsequently refusing to cooperate, [locking up coins](https://github.com/Aeternity/protocol/tree/master/channels#incentives) and making the peer pay the channel closing fees. Needs further investigation |  |   |
+|  5.6.1 | Locking up other nodes' coins in transactions | N/A  |  Discouraged through incentives (?); Users are expected to act rationally. |  Opening a channel with a peer and subsequently refusing to cooperate, [locking up coins](https://github.com/Aeternity/protocol/tree/master/channels#incentives) and making the peer pay the channel closing fees.  |  |   |
 |  5.6.2 | Making a transaction unusable | N/A  |  Halt interactions if on-chain fees reach the point, where the fees required to timely close a channel approach the balance of the channel; Discouraged through incentives | Refusing to sign a transaction when the channel holds significant funds and the account sending the transaction does not have sufficient funds to close the channel. Needs further investigation |  |  |
 |  5.6.3 | Locking up coins on multiple channels | Discouraged through incentives  |  Implement deterring incentives in protocol |  Opening multiple channels with a peer (up to the capacity of the WebSocket and subsequently refusing to cooperate, locking up coins and making the peer pay the channel closing fees. Needs further investigation |  |   |
 |  5.6.4 | Dropping arbitrary packets on a state channel to disrupt or degrade communication between two peers. | N/A  |  Discouraged through incentives |  Needs further investigation |  |  High |
