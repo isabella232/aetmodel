@@ -281,7 +281,7 @@ Epoch stores a persistent copy of the blockchain on some storage. Clearly this s
   * Example of a [similar past attack](https://getmonero.org/2017/05/17/disclosure-of-a-major-bug-in-cryptonote-based-currencies.html)
 
 * *Note 2.4: on (2.8.1.2) Tampering w. code using hijacked privileged accounts*:
-  * Example of a [similar past attack (1 Gentoo )](https://wiki.gentoo.org/wiki/Project:Infrastructure/Incident_Reports/2018-06-28_Github)
+  * Example of a [similar past attack (1) Gentoo](https://wiki.gentoo.org/wiki/Project:Infrastructure/Incident_Reports/2018-06-28_Github)
   * Example of a [similar past attack (2) Kernel.org](https://pastebin.com/BKcmMd47)
 
 * *Note 2.5: on (2.8.3) Reliance on the trusted computing base*:
