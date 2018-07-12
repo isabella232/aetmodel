@@ -167,7 +167,7 @@ We revised the updated information and relevant aspects and included them into t
 
 =============================================
 
-"(1.1.1)" -> Details provided in tables
+"(1.1.1)" -> Details provided in tables<br />
 "[1.1.1]" -> Details NOT provided in tables
 
 
@@ -342,8 +342,8 @@ Additionally the network capacity could be overloaded and therefore distribution
 
 	(5.1) Posting invalid transactions.
 	(5.2) Posting unusable transactions
-			[5.2.1] Resubmitting unusable transactions directly to a node
-			[5.2.2] Gossiping unusable transactions through the p2p network (related to 5.4.2.1)
+			(5.2.1) Resubmitting unusable transactions directly to a node
+			(5.2.2) Gossiping unusable transactions through the p2p network (related to 5.4.2.1)
 	(5.3) Exploiting memory limitations
 		(5.3.1) Memory leaks in cleaning transaction pool
 		(5.3.2) Overloading memory with atoms
@@ -356,7 +356,7 @@ Additionally the network capacity could be overloaded and therefore distribution
 			(5.4.1.4) Obtain node 'secret' used to determine peer selection from unverified pool
 		(5.4.2) Network-wide attacks against the Aeternity network
 			(5.4.2.1) Attacks to slow down the Aeternity network (See note 5.1)
-		    [5.4.2.2] Flooding the network with unresponsive nodes
+		    (5.4.2.2) Flooding the network with unresponsive nodes
 		(5.4.3) Denial of Service against predefined peer nodes
 			(5.4.3.1) Denial of Service using API functionality
 			(5.4.3.2) Denial of Service using generic DoS methods
@@ -559,7 +559,7 @@ Considering that the "Private Keys" (see **Assets**) are used to both authentica
   2.  **[Developers]** Review threat prioritization; re-assign priority level where relevant.
   * **[Security researchers]** Complete threat trees with additional threat vectors.
   * **[Security researchers]** Review code to check if developer mitigations are in place.
-  * **[Security researchers+Developers]** Implement mitigations where missing;
+  * **[Security researchers+Developers]** Implement threat mitigations where missing;
   * **[Security researchers]** Review code to identify potential security vulnerabilities in the implementation.
   * **[Security researchers]** penetration testing of an arbitrary Aeternity node;
   * **[Security researchers]** penetration testing of Aeternity trusted nodes;
