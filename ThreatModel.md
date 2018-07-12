@@ -1,16 +1,40 @@
 # aetmodel
-Documentation of threat model
+Threat model documentation.
 
 ## List of acronyms
-**AEVM** Aeternity Virtual Machine
+**AEVM** Aeternity Virtual Machine<br />
+**API** Application Programming Interface
+
+**BGP** Border Gateway Protocol
+
 **CORS** Cross-Origin Resource Sharing
 
-**EoP** Elevation of Privilege  
+**DSL** Domain Specific Language<br />
+**DB** Database
+
+**EoP** Elevation of Privilege<br />
+**ETH** Ethereum (Blockchain)
+
+**HTTP** Hypertext Transfer Protocol
+
+**ISP** Internet Service Provider
+
+**MitM** Man-in-the-Middle (attack)<br />
+
+**NTP** Network Time Protocol<br />
+**N/A** No Answer
+
+**OS** Operating System<br />
 **OOS** Out Of Scope  
-**PRNG** Pseudo-Random Number Generator   
-**MitM** Man-in-the-Middle (attack)
-**NTP** Network Time Protocol   
+
+**PRNG** Pseudo-Random Number Generator
+
+**STRIDE** Spoofing, Tampering, Repudiation, Information Disclosure, Elevation of Privilege
+
+**TTL** Time-To-Live
+
 **VM** Virtual Machine
+
 **XSS** Cross-Site Scripting (exploit)
 ## Definitions
 
@@ -208,7 +232,7 @@ We revised the updated information and relevant aspects and included them into t
 * [A1.12 |2014 | Bitcoin | XSS wallet vulnerability](https://www.reddit.com/r/Bitcoin/comments/1n57uj/im_attempting_to_reach_a_security_contact_at/)
 * [A1.13 |2017 | Generic | Signature verification flaw 1](https://www.cvedetails.com/cve/CVE-2014-9934/)
 * [A1.14 |2017 | Generic | Signature verification flaw 2](https://www.cvedetails.com/cve/CVE-2017-2898/)
-* [A1.15 |2018 | Etheremum | BGP hijacking](https://www.theverge.com/2018/4/24/17275982/myetherwallet-hack-bgp-dns-hijacking-stolen-ethereum)
+* [A1.15 |2018 | Ethereum | BGP hijacking](https://www.theverge.com/2018/4/24/17275982/myetherwallet-hack-bgp-dns-hijacking-stolen-ethereum)
 
 ### (2) Tampering
 Tampering is closely related to spoofing and information disclosure.
@@ -473,7 +497,7 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 | 5.3.1  | Exploiting memory leaks in cleaning transaction pool  | Erlang is a garbage collected language and additional garbage collection is implemented for invalid transactions.  |   | Erlang does not garbage collect atoms. Transactions that are potentially able to create new atoms from arbitrary binaries (e.g. name claim transactions) should be reviewed | TODO: check for binary_to_atom in transaction handling. Verify memory constraints on transaction pool | low |
 | 5.3.2  | Exceeding the limit of atoms to cause a node crash. | Ensure atoms are not created arbitrarily; ensure atoms are not created based on API input.  |   |   On Erlang nodes, atoms are stored once for each unique atom in the atom table. Erlang does not garbage collect atoms. Transactions that are potentially able to create new atoms from arbitrary binaries (e.g. name claim transactions) should be reviewed | TODO: check for binary_to_atom in transaction handling. Verify memory constraints on transaction pool | low |
 | 5.3.3  |  Causing a node crash by exceeding the limit of non-garbage-collected processes.  | Correct implementation of pid creation on nodes; ensure limits on number of processes created based on API input.  |  N/A | On Erlang nodes, process identifier refers into a process table and a node table. | TODO: check code spawning new processes on nodes | low |
-| 5.4.1.1  | Monopolizing incoming node connections |  Needs further investigation | Needs further investigation  |   | Attacker waits until the victim reboots (or deliberately forces the victim to reboot), and then immediately initiates incoming connections to victim from each of its attacker nodes. Attack shown for ETH - investigate relevance see [Persistence](https://github.com/Aeternity/protocol/blob/master/GOSSIP.md#persistence) |   |
+| 5.4.1.1  | Monopolizing incoming node connections |  Needs further investigation | Needs further investigation  |   | Attacker waits until the victim reboots (or deliberately forces the victim to reboot), and then immediately initiates incoming connections to victim from each of its attacker nodes. Attack shown for ETH - investigate relevance see [Persistence](https://github.com/Aeternity/F0kker50#Macrotocol/blob/master/GOSSIP.md#persistence) |   |
 |  5.4.1.2 |  Monopolizing outgoing node connections |  Needs further investigation |  Needs further investigation |   | Attacker probabilistically forces the victim to form all outgoing connection to the attacker, combined with unsolicited incoming connection requests. Attack shown for ETH - investigate relevance; see [Peer Maintenance](https://github.com/Aeternity/protocol/blob/master/GOSSIP.md#peers-maintenance)| |
 |  5.4.1.3 | Eclipsing node by skewing time, e.g. by manipulating the network time protocol (NTP) used by the host |  Needs further investigation | Configure host to use secure/trusted NTP (esp. relevant for peers)  | |Attack shown for ETH - investigate relevance| |  
 |  5.4.1.4 | Eclipsing node by influencing peer selection from unverified pool; assumes obtaining 'secret' used for peer selection |  Needs further investigation | Needs further investigation  | |Secret generation, storage and usage is [undocumented](https://github.com/Aeternity/protocol/blob/master/GOSSIP.md#bucket-selection) | |  
