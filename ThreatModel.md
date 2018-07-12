@@ -92,7 +92,7 @@ High-level features (a non-exhaustive list, to be completed):
 	* **Nonce** is a counter that increases upon every transaction.
 2. **Contract language** a DSL for writing contracts.
 3. **Oracle mechanism** ~ An oracle operator scans the blockchain for query transactions and posts answers to those queries to the chain.
-4. **Naming service** - allows to claim a name;
+4. **Naming service** - allows to claim a name; specification described [here](https://github.com/aeternity/protocol/blob/master/AENS.md)
 5. **State channels** - allow off-chain transactions;
 	* Opening and closing the channel [incurs fees](https://github.com/aeternity/protocol/blob/master/channels/README.md#incentives).
 6. **Transaction fees**
@@ -483,7 +483,7 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 ### 4. Information Disclosure
 |  Tree Node |Explanation   | Developer Mitigation   | Operational Mitigation   | Notes   | Actions | Priority |
 |---|---|---|---|---|---|---|
-| 4.1.1  |  Performing a MitM attack on the communication over a state channel  | If naming system is used - implement reliable mapping between peer names and keypairs; correct implementation of Noise protocol with specific handshake and encryption | N/A  |  - |  - |   TBD|
+| 4.1.1  |  Performing a MitM attack on the communication over a state channel  | In the [Aeternity naming system](https://github.com/aeternity/protocol/blob/master/AENS.md) - implement reliable mapping between peer names and keypairs; correct implementation of Noise protocol with specific handshake and encryption | N/A  |  - |  - |   TBD|
 | 4.1.2  |  Performing a selective DoS attack on the state channel to force peer to revert to arbitration and (partly) disclose state channel content | Ensure arbitration requires minimum information about the messages exchanged on the state channel  | N/A  |  - |   -| TBD  |
 
 ### 5. Denial of service
@@ -553,7 +553,27 @@ Considering that the "Private Keys" (see **Assets**) are used to both authentica
 		                                    "type": "integer",
 		                                    "default": 28
 
+
+## Next steps
+  1. **[Developers]** Review threats, describe additional developer mitigations - potential or in place.
+  *  **[Developers]** Review threat prioritization; re-assign priority level where relevant.
+  * **[Security researchers]** Complete threat trees with additional threat vectors.
+  * **[Security researchers]** Review code to check if developer mitigations are in place.
+  * **[Security researchers]** Review code to identify potential security vulnerabilities in the implementation.
+  * **[Security researchers]** penetration testing of an arbitrary Aeternity node;
+  * **[Security researchers]** penetration testing of Aeternity trusted nodes;
+  * **[Contributors]**  The threat model continuously evolves together with the feature and the security landscape.
+Therefore, this document must be periodically revised and updated.
+
 ## Conclusions
+This document describes a snapshot of the threat model for the Aeterinity blockchain, following the STRIDE threat modelling approach.
+To the best of our knowledge, this is a first publicly available systematic threat model of a blockchain project.
+We have described threat trees in 6 categories: spoofing, tampering, repudiation, information dsiclosure, denial of service and elevation of privilegec
+We detailed the high-level threat trees in tables.
+Along with a threat identifier, each table entry contains an explanation and (where applicable) developer mitigation, operational mitigation, notes, actions and priority.
+Threat descriptions shall be updated with further details once the Aeterity codebase stabilizes and threats are better understood.
+Threat priority should be periodically revised if new (and potentially unforeseen) usage models emerge.
+We encourage collaborators to contribute and improve this threat model.
 
 ### Threats to be mitigated
 To be completed after a review of how the threats are addressed in the codebase.
