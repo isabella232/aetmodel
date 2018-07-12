@@ -559,6 +559,7 @@ Considering that the "Private Keys" (see **Assets**) are used to both authentica
   2.  **[Developers]** Review threat prioritization; re-assign priority level where relevant.
   * **[Security researchers]** Complete threat trees with additional threat vectors.
   * **[Security researchers]** Review code to check if developer mitigations are in place.
+  * **[Security researchers+Developers]** Implement mitigations where missing;
   * **[Security researchers]** Review code to identify potential security vulnerabilities in the implementation.
   * **[Security researchers]** penetration testing of an arbitrary Aeternity node;
   * **[Security researchers]** penetration testing of Aeternity trusted nodes;
