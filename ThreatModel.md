@@ -556,7 +556,7 @@ Considering that the "Private Keys" (see **Assets**) are used to both authentica
 
 ## Next steps
   1. **[Developers]** Review threats, describe additional developer mitigations - potential or in place.
-  *  **[Developers]** Review threat prioritization; re-assign priority level where relevant.
+  2.  **[Developers]** Review threat prioritization; re-assign priority level where relevant.
   * **[Security researchers]** Complete threat trees with additional threat vectors.
   * **[Security researchers]** Review code to check if developer mitigations are in place.
   * **[Security researchers]** Review code to identify potential security vulnerabilities in the implementation.
@@ -590,6 +590,6 @@ To be completed after a review of how the threats are addressed in the codebase.
 
 ## References
 
-[1] P. Torr, "Demystifying the Threat-Modeling Process," in IEEE Security & Privacy, vol. 3, no. , pp. 66-70, 2005.
+[1] P. Torr, "Demystifying the Threat-Modelling Process," in IEEE Security & Privacy, vol. 3, no. , pp. 66-70, 2005.
 [doi](10.1109/MSP.2005.119), [url](doi.ieeecomputersociety.org/10.1109/MSP.2005.119)<br />
-[2] A. Shostack "Threat Modeling: Designing for Security", ISBN: 978-1-118-80999-0, Feb 2014
+[2] A. Shostack "Threat Modelling: Designing for Security", ISBN: 978-1-118-80999-0, Feb 2014
