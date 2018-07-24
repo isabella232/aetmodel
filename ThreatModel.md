@@ -120,7 +120,7 @@ Control over tokens that belong to an account should be unconditionally linked t
 
 ## Assumptions
 
-The following list contains assumptions at the core of the threat model for the Aeternity blockain.
+The following list contains assumptions at the core of the threat model for the Aeternity blockchain.
 The list is **not** exhaustive and should be extended with additional assumptions about the functionality and structure of the Aeternity blockchain.
 The purpose of the list is - once complete - to explicitly list all assumptions that impact the security of the Aeternity blockchain and thus facilitate future work on improving the security and robustness of the blockchain.
 
@@ -464,7 +464,7 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 |  2.7.1 | Tampering the genesis block in persistent DB | A node is isolated if genesis block differs, no communication with other epochs possible  | Ensure that database runs in protected area | -  |  - |  no issue |
 |  2.7.2 | Tampering a block in persistent DB | DB is read at startup and all blocks are validated again, tampering will be noticed in block-hash that does not fit. If new consecutive hashes have been computed, then DB is considered a fork and tampered part is removed while syncing with other nodes |  Ensure that database runs in protected area |- |  - | no issue  |
 |  2.8.1.1 | Hiding (potentially obfuscated) malicious code in a commit | N/A |  Conduct security reviews of external pull requests | |  - | low priority  |
-|  2.8.1.2 | Abusing position of trusted insider (e.g. developer) to tamper with code integrity | N/A |  Perform background checks of developers; periodically re-evaluate potential personal vulnerabilities of developers (debts, addictions, vulnberable personal situation, etc.) | -| - | low priority  |
+|  2.8.1.2 | Abusing position of trusted insider (e.g. developer) to tamper with code integrity | N/A |  Perform background checks of developers; periodically re-evaluate potential personal vulnerabilities of developers (debts, addictions, vulnerable personal situation, etc.) | -| - | low priority  |
 |  2.8.1.3 | Hijacking a privileged account (e.g. developer, release manager, etc.) to tamper with code integrity | N/A |  (a) Use strong, 2-factor authentication for code repository; (b) ensure passwords are not reused; (c) ensure security of 2nd factor; (d) ensure security of authentication gateway  | -|  - | low priority  |
 |  2.8.2 | Tampering with code in a library built into the epoch binary | N/A |  (a) Bind releases to whitelisted release tags of dependency libraries   (b) Epoch security review and testing whenever release tag changes   (c) Lock checksum of dependencies used to build  | -|   -| low priority  |
 |  2.8.3 | Tampering with code in the Epoch trusted computing base (incl. dependencies) | N/A |  (a) Bind releases to whitelisted release tags of dependency libraries  (b) Epoch security review and testing whenever release tag changes  | -|  - | low priority  |
@@ -571,12 +571,12 @@ Considering that the "Private Keys" (see **Assets**) are used to both authentica
 Therefore, this document must be periodically revised and updated.
 
 ## Conclusions
-This document describes a snapshot of the threat model for the Aeterinity blockchain, following the STRIDE threat modelling approach.
+This document describes a snapshot of the threat model for the Aeternity blockchain, following the STRIDE threat modelling approach.
 To the best of our knowledge, this is a first publicly available systematic threat model of a blockchain project.
-We have described threat trees in 6 categories: spoofing, tampering, repudiation, information dsiclosure, denial of service and elevation of privilegec
+We have described threat trees in 6 categories: spoofing, tampering, repudiation, information disclosure, denial of service and elevation of privilege
 We detailed the high-level threat trees in tables.
 Along with a threat identifier, each table entry contains an explanation and (where applicable) developer mitigation, operational mitigation, notes, actions and priority.
-Threat descriptions shall be updated with further details once the Aeterity codebase stabilizes and threats are better understood.
+Threat descriptions shall be updated with further details once the Aeternity codebase stabilizes and threats are better understood.
 Threat priority should be periodically revised if new (and potentially unforeseen) usage models emerge.
 We encourage collaborators to contribute and improve this threat model.
 
