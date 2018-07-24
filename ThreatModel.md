@@ -368,6 +368,7 @@ Additionally the network capacity could be overloaded and therefore distribution
 		(5.6.3) Open channels up to the full capacity of the node;
 		(5.6.4) Dropping messages on a state channel;
 		(5.6.5) Exploiting errors in the contract language to run contracts without gas;
+	(5.7) Exploiting vulnerabilities in used libraries (e.g. cuckoo cycle validation code, degrading PoW check)
 
 
  * **Notes**
@@ -509,6 +510,7 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 |  5.6.2 | Making a transaction unusable | N/A  |  Halt interactions if on-chain fees reach the point, where the fees required to timely close a channel approach the balance of the channel; Discouraged through incentives | Refusing to sign a transaction when the channel holds significant funds and the account sending the transaction does not have sufficient funds to close the channel. Needs further investigation |  -|  TBD|
 |  5.6.3 | Locking up coins on multiple channels | Discouraged through incentives  |  Implement deterring incentives in protocol |  Opening multiple channels with a peer (up to the capacity of the WebSocket and subsequently refusing to cooperate, locking up coins and making the peer pay the channel closing fees. Needs further investigation |  -| TBD  |
 |  5.6.4 | Dropping arbitrary packets on a state channel to disrupt or degrade communication between two peers. | N/A  |  Discouraged through incentives |  Needs further investigation |  -|  High |
+|  5.7 | Exploiting vulnerabilities in used libraries (e.g. cuckoo cycle validation code, degrading PoW check) | Check for security audits on used libraries  |  N/A |  Needs further investigation |  -|  TBD |
 
 
 ### 6. Elevation of privilege
