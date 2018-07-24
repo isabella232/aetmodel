@@ -158,7 +158,7 @@ A virtualization of the threat trees will be added in the future if necessary.
 * **(6) Elevation of privilege** - Gain capabilities without proper authorization
 
 ### 2. Earlier threat model work on Bitcoin
-Earlier work has been done on the [Bitcoin threat model](https://github.com/JWWeatherman/bitcoin_security_threat_model).
+Earlier work has been done on the [Bitcoin threat model](https://github.com/JWWeatherman/bitcoin_security_threat_model), list of [Bitcoin Weaknesses](https://en.bitcoin.it/wiki/Weaknesses) and [Bitcoin Vulnerabilities and Exposures](https://en.bitcoin.it/wiki/Common_Vulnerabilities_and_Exposures).
 We have reviewed and adapted the parts that were considered relevant to Aeternity.
 
 ### 3. Earlier threat model work on Aeternity
