@@ -25,7 +25,7 @@ Threat model documentation.
 **N/A** No Answer
 
 **OS** Operating System<br />
-**OOS** Out Of Scope  
+**OOS** Out Of Scope
 
 **PRNG** Pseudo-Random Number Generator<br />
 **p2p** Peer-to-Peer
@@ -47,13 +47,13 @@ Threat model documentation.
 **Noise protocol** [Crypto protocol based on Diffie-Hellman key agreement](http://noiseprotocol.org/noise.html) that we use with [specific handshake](https://github.com/aeternity/protocol/blob/master/SYNC.md) (**XK**) and encryption (ChaCHaPoly).
 
 **Node** (aka **Epoch node**) umbrella term for Aeternity protocol participant; includes miner nodes, client nodes, peers, etc.
-Identified by a URI consisting of the protocol 'aenode://', the public key, an '@' character, the hostname or IP number, a ':' character and the Noise port number.  
+Identified by a URI consisting of the protocol 'aenode://', the public key, an '@' character, the hostname or IP number, a ':' character and the Noise port number.
 
 **Connection** is a communication channel between two nodes peers. Two arbitrary peers can have zero or many connections.
 
 **Peer Node** [is a node participating in a channel](https://github.com/Aeternity/protocol/tree/master/channels#terms).
 **Penetration testing** (aka ***pentesting***) authorized simulated attack on a computer system, performed to evaluate the security of the target system.
-The test aims to identify the target's strengths and vulnerabilities, including the potential for unauthorized parties to gain access to the system's software and data.  
+The test aims to identify the target's strengths and vulnerabilities, including the potential for unauthorized parties to gain access to the system's software and data.
 **Predefined Epoch Node** This is a peer that is automatically connected to upon node startup.
 
 **Spoofing** is an attack in which a person or program successfully masquerades as another by falsifying data, to gain an illegitimate advantage.
@@ -63,11 +63,11 @@ The test aims to identify the target's strengths and vulnerabilities, including 
 **Transactions** A transaction is an artefact that you post to the blockchain to alter its state. There are many kinds of transactions, e.g. to transfer tokens from one account to another, to create a contract, to query an oracle, etc.
 If a transaction is syntactically incorrect it will just be ignored.
 Syntactically correct transactions can be classified in 3 groups:
-  * **Invalid** transactions are rejected by the validation algorithm. A reason could be that the nonce of a spend transaction is already used on chain, that the TTL (time-to-live) is less than the present height of the chain, etc.
+ * **Invalid** transactions are rejected by the validation algorithm. A reason could be that the nonce of a spend transaction is already used on chain, that the TTL (time-to-live) is less than the present height of the chain, etc.
 	If the validation algorithm rejects a transaction, it is invalid.
-  * **Unusable** transactions are rejected by the validation algorithm, because they cannot be used at the moment. However, they  can potentially be used in the future.
+ * **Unusable** transactions are rejected by the validation algorithm, because they cannot be used at the moment. However, they can potentially be used in the future.
 	For example, a transaction that spends more tokens than it has in the account is unusable, but can become usable a few blocks later if another transaction transfers money to it.
-  * **Valid** transactions are accepted by the validation algorithm.
+ * **Valid** transactions are accepted by the validation algorithm.
 	They can be part of the next generated block. A miner is not forced to use a valid transaction in a generated block; miners are free to pick any number of valid transactions they prefer (e.g. depending on fees connected to them).
 
 
@@ -120,7 +120,7 @@ Control over tokens that belong to an account should be unconditionally linked t
 
 ## Assumptions
 
-The following list contains assumptions at the core of the threat model for the  Aeternity blockain.
+The following list contains assumptions at the core of the threat model for the Aeternity blockchain.
 The list is **not** exhaustive and should be extended with additional assumptions about the functionality and structure of the Aeternity blockchain.
 The purpose of the list is - once complete - to explicitly list all assumptions that impact the security of the Aeternity blockchain and thus facilitate future work on improving the security and robustness of the blockchain.
 
@@ -143,22 +143,22 @@ The AEVM executes untrusted code and EoP should not be possible.
 
 The threat model described in this document is based on three artifacts:
 
-### 1. The **STRIDE** model:   
+### 1. The **STRIDE** model:
 
 STRIDE is a mnemonic for things that go wrong in computer and network systems security [1],[2].
 It stands for Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege.
 We base the threat model described in this document on an adaptation of the STRIDE methodology.
 A virtualization of the threat trees will be added in the future if necessary.
 
-* **(1) Spoofing** - Impersonating something or someone else.  
-* **(2) Tampering** - Modifying data (transaction content?) or code.   
-* **(3) Repudiation** - Claiming	to	have not performed an action.   
+* **(1) Spoofing** - Impersonating something or someone else.
+* **(2) Tampering** - Modifying data (transaction content?) or code.
+* **(3) Repudiation** - Claiming	to	have not performed an action.
 * **(4) Information disclosure** - Exposing information to someone not authorized to see it.
-* **(5) Denial of service** - Deny or	degrade service to users.  
-* **(6) Elevation of privilege** -  Gain capabilities without proper authorization
+* **(5) Denial of service** - Deny or	degrade service to users.
+* **(6) Elevation of privilege** - Gain capabilities without proper authorization
 
 ### 2. Earlier threat model work on Bitcoin
-Earlier work has been done on the [Bitcoin threat model](https://github.com/JWWeatherman/bitcoin_security_threat_model).
+Earlier work has been done on the [Bitcoin threat model](https://github.com/JWWeatherman/bitcoin_security_threat_model), list of [Bitcoin Weaknesses](https://en.bitcoin.it/wiki/Weaknesses) and [Bitcoin Vulnerabilities and Exposures](https://en.bitcoin.it/wiki/Common_Vulnerabilities_and_Exposures).
 We have reviewed and adapted the parts that were considered relevant to Aeternity.
 
 ### 3. Earlier threat model work on Aeternity
@@ -185,9 +185,9 @@ We revised the updated information and relevant aspects and included them into t
 			(1.1.2.2) Third-party storage (e.g. on-line wallets).
 			(1.1.2.3) Exploit cross-site scripting vulnerabilities browser-based wallets.
 			(1.1.2.4) Malicious neighbours on shared hardware platform.
-                    (1.1.2.4.1) Malicious neighbours on shared operating system
-                    (1.1.2.4.2) Malicious neighbours on operating system virtualized platform (in containers).
-                    (1.1.2.4.3) Malicious neighbours on hardware virtualized platform (in virtual machines)
+				(1.1.2.4.1) Malicious neighbours on shared operating system
+				(1.1.2.4.2) Malicious neighbours on operating system virtualized platform (in containers).
+				(1.1.2.4.3) Malicious neighbours on hardware virtualized platform (in virtual machines)
 			(1.1.2.5) By operator of virtualized infrastructure.
 			(1.1.2.6) By malicious apps on mobile devices.
 				(1.1.2.6.1) By malicious colocated apps on mobile devices
@@ -219,9 +219,9 @@ We revised the updated information and relevant aspects and included them into t
 		(1.4.4) Executing a fun though an external API
 
  * **Past attacks**
-*  [A1.1 | 2012 | Generic | Ron was wrong, Whit is right | iacr eprint](https://eprint.iacr.org/2012/064.pdf)
-*  [A1.2 |2012 | Generic | Mining Your Ps and Qs: Detection of Widespread Weak Keys in Network Devices | Usenix Security](https://www.usenix.org/system/files/conference/usenixsecurity12/sec12-final228.pdf)
-*  [A1.3 |2016 | Generic | Weak Keys Remain Widespread in Network Devices | IMC'16](https://dl.acm.org/ft_gateway.cfm?id=2987486&type=pdf)
+* [A1.1 | 2012 | Generic | Ron was wrong, Whit is right | iacr eprint](https://eprint.iacr.org/2012/064.pdf)
+* [A1.2 |2012 | Generic | Mining Your Ps and Qs: Detection of Widespread Weak Keys in Network Devices | Usenix Security](https://www.usenix.org/system/files/conference/usenixsecurity12/sec12-final228.pdf)
+* [A1.3 |2016 | Generic | Weak Keys Remain Widespread in Network Devices | IMC'16](https://dl.acm.org/ft_gateway.cfm?id=2987486&type=pdf)
 * [A1.4 |2013 | Bitcoin | Weak crypto on Android](https://arstechnica.com/information-technology/2013/08/google-confirms-critical-android-crypto-flaw-used-in-5700-bitcoin-heist/).
 * [A1.5 |2011 | Bitcoin | Private keys stolen from wallet](https://bitcointalk.org/index.php?topic=16457.msg214423#msg214423)
 * [A1.6 |2017 | Bitcoin | MtGox wallet.dat file stolen (e.g. through exploit, rogue employee, back-up theft)](https://blog.wizsec.jp/2017/07/breaking-open-mtgox-1.html)
@@ -245,9 +245,9 @@ Tampering is closely related to spoofing and information disclosure.
 		(2.2) Tampering with message integrity
 			(2.2.1) No message integrity
 			(2.2.2) Weak message integrity;
-        (2.3) Tampering with block integrity
-            (2.3.1) Tampering with the ordering of transactions included in a block
-            (2.3.2) Tampering the timestamp in mined blocks
+		(2.3) Tampering with block integrity
+			(2.3.1) Tampering with the ordering of transactions included in a block
+			(2.3.2) Tampering the timestamp in mined blocks
 		(2.4) Tampering with block validity
 			(2.4.1) No verification of block validity
 			(2.4.2) Weak verification of block validity
@@ -263,10 +263,10 @@ Tampering is closely related to spoofing and information disclosure.
 			(2.7.2) Tampering blocks
 		(2.8) Tampering with code (see Note 2.2)
 			(2.8.1) Tampering with code in the Epoch code repository
-              (2.8.1.1) Hiding malicious code in a commit (see Note 2.3);
-              (2.8.1.2) Performing an insider attack;
-              (2.8.1.3) Tampering with code using hijacked privileged accounts (see Note 2.4)
-            (2.8.2) Tampering with code in a library built into the Epoch binary
+			 	(2.8.1.1) Hiding malicious code in a commit (see Note 2.3);
+			 	(2.8.1.2) Performing an insider attack;
+			 	(2.8.1.3) Tampering with code using hijacked privileged accounts (see Note 2.4)
+			(2.8.2) Tampering with code in a library built into the Epoch binary
 			(2.8.3) Tampering with code in a shared dependency used by Epoch (See note 2.5)
 			(2.8.4) Tampering with code during compilation (e.g. via build software, see Note 2.6)
 			(2.8.5) Tampering from Erlang nodes on the same platform (see Note 2.7)
@@ -278,11 +278,11 @@ Epoch stores a persistent copy of the blockchain on some storage. Clearly this s
 * *Note 2.2: on (2.8) Code Tampering*:
  The epoch node software is open source and constructed using other open source components or libraries.
 * *Note 2.3: on (2.8.1.1) Tampering w. code in Epoch code repository*:
-  * Example of a [similar past attack](https://getmonero.org/2017/05/17/disclosure-of-a-major-bug-in-cryptonote-based-currencies.html)
+ * Example of a [similar past attack](https://getmonero.org/2017/05/17/disclosure-of-a-major-bug-in-cryptonote-based-currencies.html)
 
 * *Note 2.4: on (2.8.1.2) Tampering w. code using hijacked privileged accounts*:
-  * Example of a [similar past attack (1) Gentoo](https://wiki.gentoo.org/wiki/Project:Infrastructure/Incident_Reports/2018-06-28_Github)
-  * Example of a [similar past attack (2) Kernel.org](https://pastebin.com/BKcmMd47)
+ * Example of a [similar past attack (1) Gentoo](https://wiki.gentoo.org/wiki/Project:Infrastructure/Incident_Reports/2018-06-28_Github)
+ * Example of a [similar past attack (2) Kernel.org](https://pastebin.com/BKcmMd47)
 
 * *Note 2.5: on (2.8.3) Reliance on the trusted computing base*:
 The threats described under 2.8.1 apply also to all of the libraries that the Epoch nodes rely on.
@@ -321,7 +321,7 @@ The threats to the confidentiality and integrity of the node private keys are li
 
 Hence, if the assumption is correct, the information disclosure threat tree is a subtree of the ***Spoofing*** threat tree
 
-Update 2018-07-02, based on [issue#2](https://github.com/ThomasArts/aetmodel/issues/2) ***The messages exchanged in a state channel should be private — as long as peers cooperate —, i.e. MitM should not be possible***, i.e. assumption  1 is false.
+Update 2018-07-02, based on [issue#2](https://github.com/ThomasArts/aetmodel/issues/2) ***The messages exchanged in a state channel should be private — as long as peers cooperate —, i.e. MitM should not be possible***, i.e. assumption 1 is false.
 
 Threat tree for threat vector (4): Information Disclosure.
 
@@ -356,29 +356,30 @@ Additionally the network capacity could be overloaded and therefore distribution
 			(5.4.1.4) Obtain node 'secret' used to determine peer selection from unverified pool
 		(5.4.2) Network-wide attacks against the Aeternity network
 			(5.4.2.1) Attacks to slow down the Aeternity network (See note 5.1)
-		    (5.4.2.2) Flooding the network with unresponsive nodes
+			(5.4.2.2) Flooding the network with unresponsive nodes
 		(5.4.3) Denial of Service against predefined peer nodes
 			(5.4.3.1) Denial of Service using API functionality
 			(5.4.3.2) Denial of Service using generic DoS methods
 	(5.5) Exploiting software vulnerabilities to degrade or deny service
 		(5.5.1) Improper check for unusual or exceptional condition
 	(5.6) Exploiting epoch protocol vulnerabilities to degrade or deny service.
-		(5.6.1) Refusing to cooperate after having opened the channel;  
+		(5.6.1) Refusing to cooperate after having opened the channel;
 		(5.6.2) Refusing to sign a multi-party transaction;
 		(5.6.3) Open channels up to the full capacity of the node;
 		(5.6.4) Dropping messages on a state channel;
 		(5.6.5) Exploiting errors in the contract language to run contracts without gas;
+	(5.7) Exploiting code flaw in validation to create coins
+	(5.8) Exploiting vulnerabilities in used libraries (e.g. cuckoo cycle validation code, degrading PoW check)
+	(5.9) Exploiting code flaws to force hash collisions
 
 
-  * **Notes**
-    * *Note 5.1 on 5.4.2.1 Attacks to slow down the Aeternity network*: ISPs can delay block propagation between nodes even without being detected, using a so-called 'delay attack' (see A5.3 under "past attacks" below).
-    While A5.3 has been demonstrated for Bitcoin, it is worth investigating how robust is Aeternity to such attacks.
-
+ * **Notes**
+ * *Note 5.1 on 5.4.2.1 Attacks to slow down the Aeternity network*: ISPs can delay block propagation between nodes even without being detected, using a so-called 'delay attack' (see A5.3 under "past attacks" below). While A5.3 has been demonstrated for Bitcoin, it is worth investigating how robust is Aeternity to such attacks.
 
  * **Past attacks**
-  * [A5.1 | 2018 | Ethereum | Low-Resource Eclipse Attacks on Ethereum’s Peer-to-Peer Network (iacr eprint)](https://www.cs.bu.edu/~goldbe/projects/eclipseEth.pdf)
-  * [A5.3 |2018 | Ethereum | Unhandled exception vulnerability exists in Ethereum API](https://nvd.nist.gov/vuln/detail/CVE-2017-12119)
-  * [A5.3 |2017 | Bitcoin | Hijacking Bitcoin: routing attacks on cryptocurrencies | IEEE S&P](https://btc-hijack.ethz.ch/)
+ * [A5.1 | 2018 | Ethereum | Low-Resource Eclipse Attacks on Ethereum’s Peer-to-Peer Network (iacr eprint)](https://www.cs.bu.edu/~goldbe/projects/eclipseEth.pdf)
+ * [A5.3 |2018 | Ethereum | Unhandled exception vulnerability exists in Ethereum API](https://nvd.nist.gov/vuln/detail/CVE-2017-12119)
+ * [A5.3 |2017 | Bitcoin | Hijacking Bitcoin: routing attacks on cryptocurrencies | IEEE S&P](https://btc-hijack.ethz.ch/)
 
 * **Background information**
 	 * [2018 | Aeternity state channel incentives](https://github.com/Aeternity/protocol/tree/master/channels#incentives)
@@ -391,7 +392,7 @@ Hence, if the assumption is correct, the elevation of privilege threat tree only
 
 **Update 2018-07-02** Assumption is FALSE, since [the AEVM executes untrusted code](https://github.com/ThomasArts/aetmodel/issues/3)
 
-**Discuss:** As long as the network is small, there is a concept of Aeternity owned nodes that would be more "trustable" than other nodes. In the beginning it might be important to prevent a small different subset of nodes to take the role as trusted set to connect to.  This falls under the threat of so-called ["altcoin infanticide"](https://bitcointalk.org/index.php?topic=56675.0).
+**Discuss:** As long as the network is small, there is a concept of Aeternity owned nodes that would be more "trustable" than other nodes. In the beginning it might be important to prevent a small different subset of nodes to take the role as trusted set to connect to. This falls under the threat of so-called ["altcoin infanticide"](https://bitcointalk.org/index.php?topic=56675.0).
 
 
 	(6.1) EoP on the epoch node.
@@ -413,7 +414,7 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 |---|---|---|---|---|---|---|
 | 1.1.1.1  | Use of weak or flawed PRNGs leading to generation of keys that are predictable or brute-forceable  | Ensure best-practice PRNG is used | [Libsodium PRNG](https://download.libsodium.org/doc/generating_random_data/) is used | relevant for mobile devices - past attacks exist | - | low priority (unlikely) |
 | 1.1.1.2  | Vulnerabilities in key generation implementation leading to generation of keys that are predictable or brute-forceable  | Verify Key generation implementation and use keys of sufficient length | N/A | Private keys are 256 bits: both for P2P connections as well as for signing transactions. relevant for mobile devices - past attacks exist  | TODO: verify that the user cannot accidentally use a key with less than 256 bits;  | low priority (unlikely)|
-| 1.1.1.2.1  | Vulnerabilities in the  crypto library implementation of key generation implementation leading to generation of keys that are predictable or brute-forceable  | Extensive testing of the underlying crypto library | Short patching cycle | -  |  - | low priority (unlikely)|
+| 1.1.1.2.1  | Vulnerabilities in the crypto library implementation of key generation implementation leading to generation of keys that are predictable or brute-forceable  | Extensive testing of the underlying crypto library | Short patching cycle | -  |  - | low priority (unlikely)|
 | 1.1.1.2.2  | Vulnerabilities in the Epoch crypto functionality implementation leading to generation of keys that are predictable or brute-forceable | Extensive testing of the Epoch crypto functionality | Short patching cycle | -  |  - | medium priority |
 |  1.1.2.1 | Vulnerabilities in the client platform, exploitable through trojans or viruses |  N/A | N/A  | Out of scope (OOS) | - | TBD |
 |  1.1.2.2    | Vulnerabilities in 3rd party wallets and applications | N/A  |  N/A | OOS; NOTE: Risk of multiple account compromise   | - |TBD |
@@ -463,7 +464,7 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 |  2.7.1 | Tampering the genesis block in persistent DB | A node is isolated if genesis block differs, no communication with other epochs possible  | Ensure that database runs in protected area | -  |  - |  no issue |
 |  2.7.2 | Tampering a block in persistent DB | DB is read at startup and all blocks are validated again, tampering will be noticed in block-hash that does not fit. If new consecutive hashes have been computed, then DB is considered a fork and tampered part is removed while syncing with other nodes |  Ensure that database runs in protected area |- |  - | no issue  |
 |  2.8.1.1 | Hiding (potentially obfuscated) malicious code in a commit | N/A |  Conduct security reviews of external pull requests | |  - | low priority  |
-|  2.8.1.2 | Abusing position of trusted insider (e.g. developer) to tamper with code integrity | N/A |  Perform background checks of developers; periodically re-evaluate potential personal vulnerabilities of developers (debts, addictions, vulnberable personal situation, etc.) | -| - | low priority  |
+|  2.8.1.2 | Abusing position of trusted insider (e.g. developer) to tamper with code integrity | N/A |  Perform background checks of developers; periodically re-evaluate potential personal vulnerabilities of developers (debts, addictions, vulnerable personal situation, etc.) | -| - | low priority  |
 |  2.8.1.3 | Hijacking a privileged account (e.g. developer, release manager, etc.) to tamper with code integrity | N/A |  (a) Use strong, 2-factor authentication for code repository; (b) ensure passwords are not reused; (c) ensure security of 2nd factor; (d) ensure security of authentication gateway  | -|  - | low priority  |
 |  2.8.2 | Tampering with code in a library built into the epoch binary | N/A |  (a) Bind releases to whitelisted release tags of dependency libraries   (b) Epoch security review and testing whenever release tag changes   (c) Lock checksum of dependencies used to build  | -|   -| low priority  |
 |  2.8.3 | Tampering with code in the Epoch trusted computing base (incl. dependencies) | N/A |  (a) Bind releases to whitelisted release tags of dependency libraries  (b) Epoch security review and testing whenever release tag changes  | -|  - | low priority  |
@@ -511,6 +512,9 @@ As a rule, when a leaf node becomes a parent it is replaced by one or more leaf 
 |  5.6.2 | Making a transaction unusable | N/A  |  Halt interactions if on-chain fees reach the point, where the fees required to timely close a channel approach the balance of the channel; Discouraged through incentives | Refusing to sign a transaction when the channel holds significant funds and the account sending the transaction does not have sufficient funds to close the channel. Needs further investigation |  -|  TBD|
 |  5.6.3 | Locking up coins on multiple channels | Discouraged through incentives  |  Implement deterring incentives in protocol |  Opening multiple channels with a peer (up to the capacity of the WebSocket and subsequently refusing to cooperate, locking up coins and making the peer pay the channel closing fees. Needs further investigation |  -| TBD  |
 |  5.6.4 | Dropping arbitrary packets on a state channel to disrupt or degrade communication between two peers. | N/A  |  Discouraged through incentives |  Needs further investigation |  -|  High |
+|  5.7 | Exploiting code flaw in validation to create coins (cf. CVE-2010-5139) | Verify code for possible overflows to be handled as expected  |  N/A |  Needs further investigation |  -|  High |
+|  5.8 | Exploiting vulnerabilities in used libraries (e.g. cuckoo cycle validation code, degrading PoW check) | Check for security audits on used libraries  |  N/A |  Needs further investigation |  -|  TBD |
+|  5.9 | Exploiting code flaws to force hash collisions (cf. CVE-2012-2459) | Check for implantation of hash ingredients and tree library used |  N/A |  Needs further investigation |  -|  TBD |
 
 
 ### 6. Elevation of privilege
@@ -542,7 +546,7 @@ Considering that the "Private Keys" (see **Assets**) are used to both authentica
 * **[Discussion]** In aec_peers, '-type peer\_id(): What is the consideration behind using the public key (and not e.g. a hash of it) as peer id?
 
 * **[Discussion]** In epoch_config_schema.json: ***Is it intended that the default contradicts the comment?***
-	  "extra_args" : { "description" : "Extra arguments to pass to the miner executable binary. The safest choice is specifying no arguments i.e. empty string.",
+	"extra_args" : { "description" : "Extra arguments to pass to the miner executable binary. The safest choice is specifying no arguments i.e. empty string.",
 		                                    "type" : "string",
 		                                    "default": "-t 5"
 		                                },
@@ -555,24 +559,24 @@ Considering that the "Private Keys" (see **Assets**) are used to both authentica
 
 
 ## Next steps
-  1. **[Developers]** Review threats, describe additional developer mitigations - potential or in place.
-  2.  **[Developers]** Review threat prioritization; re-assign priority level where relevant.
-  * **[Security researchers]** Complete threat trees with additional threat vectors.
-  * **[Security researchers]** Review code to check if developer mitigations are in place.
-  * **[Security researchers+Developers]** Implement threat mitigations where missing;
-  * **[Security researchers]** Review code to identify potential security vulnerabilities in the implementation.
-  * **[Security researchers]** penetration testing of an arbitrary Aeternity node;
-  * **[Security researchers]** penetration testing of Aeternity trusted nodes;
-  * **[Contributors]**  The threat model continuously evolves together with the feature and the security landscape.
+ 1. **[Developers]** Review threats, describe additional developer mitigations - potential or in place.
+ 2. **[Developers]** Review threat prioritization; re-assign priority level where relevant.
+ * **[Security researchers]** Complete threat trees with additional threat vectors.
+ * **[Security researchers]** Review code to check if developer mitigations are in place.
+ * **[Security researchers+Developers]** Implement threat mitigations where missing;
+ * **[Security researchers]** Review code to identify potential security vulnerabilities in the implementation.
+ * **[Security researchers]** penetration testing of an arbitrary Aeternity node;
+ * **[Security researchers]** penetration testing of Aeternity trusted nodes;
+ * **[Contributors]** The threat model continuously evolves together with the feature and the security landscape.
 Therefore, this document must be periodically revised and updated.
 
 ## Conclusions
-This document describes a snapshot of the threat model for the Aeterinity blockchain, following the STRIDE threat modelling approach.
+This document describes a snapshot of the threat model for the Aeternity blockchain, following the STRIDE threat modelling approach.
 To the best of our knowledge, this is a first publicly available systematic threat model of a blockchain project.
-We have described threat trees in 6 categories: spoofing, tampering, repudiation, information dsiclosure, denial of service and elevation of privilegec
+We have described threat trees in 6 categories: spoofing, tampering, repudiation, information disclosure, denial of service and elevation of privilege
 We detailed the high-level threat trees in tables.
 Along with a threat identifier, each table entry contains an explanation and (where applicable) developer mitigation, operational mitigation, notes, actions and priority.
-Threat descriptions shall be updated with further details once the Aeterity codebase stabilizes and threats are better understood.
+Threat descriptions shall be updated with further details once the Aeternity codebase stabilizes and threats are better understood.
 Threat priority should be periodically revised if new (and potentially unforeseen) usage models emerge.
 We encourage collaborators to contribute and improve this threat model.
 
